@@ -1,0 +1,22 @@
+{
+  "name": "material-ui",
+  "version": "1.0.0",
+  "description": "Testing material-ui components",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evergreen-callum-fallows/material-ui.git"
+  },
+  "author": "Callum Fallows",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evergreen-callum-fallows/material-ui/issues"
+  },
+  "homepage": "https://github.com/evergreen-callum-fallows/material-ui#readme",
+  "dependencies": {
+    "create-react-app": "^4.0.1"
+  }
+}
