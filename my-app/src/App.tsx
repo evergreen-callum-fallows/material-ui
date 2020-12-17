@@ -1,10 +1,19 @@
-import React from 'react';
+import React, {useState} from 'react';
+import clsx from 'clsx';
 import './App.css';
-import {Container, Divider, Grid, Link, makeStyles} from "@material-ui/core";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-
+import {
+  Container,
+  Divider,
+  Drawer,
+  Grid, IconButton, List, ListItem, ListItemIcon,
+  ListItemText,
+  makeStyles, Toolbar, Typography,
+} from "@material-ui/core";
+import CardComponent from "./components/Card";
+import {infoFeedItems, lastVisitedPatientsMock} from "./prototypes/App.prototype";
+import NavigationLink from "./components/NavigationLink";
+import InfoPanel from "./components/InfoPanel";
+import {ArrowRight, ContactMail} from '@material-ui/icons';
 const theme = {
   colors: {
     white: "#ffffff",
@@ -54,98 +63,113 @@ const theme = {
   }
 }
 
+const drawerWidth = 240;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
+    padding: 0,
+    margin:0,
     backgroundColor: theme.palette.background.paper,
+    overflow: 'hidden'
   },
-  card: {
-    border: '1px solid black',
-    borderRadius: '16px',
-    boxShadow: '1px 1px 1px black'
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
   },
-  link: {
-    transition: "all 0.15s ease-out",
-    cursor: "pointer",
-    textDecoration: "none",
-    outline: "none",
-    color: "#36ab45",
-    fontWeight: 700
+  mainContainer: {
+    padding: 0,
+    textAlign: 'center',
+    maxWidth: '100%'
+  },
+  gridContainer: {
+    flexDirection: "row",
+  },
+  footer: {
+    flexDirection: "row",
+    [theme.breakpoints.down('xs')]: {
+      position: 'fixed',
+      zIndex: '9999',
+      bottom: 0,
+      width: '100%',
+      background: 'white'
+    },
+  },
+    hide: {
+      display: 'none',
+    },
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
+      whiteSpace: 'nowrap',
+    },
+    drawerOpen: {
+      width: drawerWidth,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    drawerClose: {
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      overflowX: 'hidden',
+      width: theme.spacing(7) + 1,
+      [theme.breakpoints.up('sm')]: {
+        width: theme.spacing(9) + 1,
+      },
+    },
+    toolbar: {
+
+    },
+  menuButton: {
+
   }
-}));
+  }));
 
-const CardComponent = (props: ICardInterface): JSX.Element => {
-  const classes = useStyles();
-  return <List className={classes.card}>
-      <ListItem>
-        <ListItemText primary={props.name} secondary={props.nhsNumber} />
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemText primary="Gender" secondary={props.gender} />
-      </ListItem>
-      <ListItem>
-        <ListItemText primary="Born" secondary={props.date_of_birth}/>
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <Link className={classes.link} href="#">
-          Get Summary
-        </Link>
-      </ListItem>
-    </List>
-}
-const listData = [
-  {
-    name: "WILLIAMS, Jonathon Simson",
-    nhsNumber: "123 567 766",
-    gender: "male",
-    date_of_birth:"14-Jul-1956 (39y)"
-  },
-  {
-    name: "WILLIAMS, Jonathon Simson",
-    nhsNumber: "123 567 766",
-    gender: "male",
-    date_of_birth:"14-Jul-1956 (39y)"
-  },
-  {
-    name: "WILLIAMS, Jonathon Simson",
-    nhsNumber: "123 567 766",
-    gender: "male",
-    date_of_birth: ""
-  },
-  {
-    name: "WILLIAMS, Jonathon Simson",
-    nhsNumber: "123 567 766",
-    gender: "male",
-    date_of_birth:"14-Jul-1956 (39y)"
-  }]
-
-interface ICardInterface {
-  name: string;
-  nhsNumber: string;
-  gender: string;
-  date_of_birth: string
-}
 /* Cards */
-const Cards = listData && listData.map(({date_of_birth, gender, name, nhsNumber}) =>
-    <Grid item xs={12} md={3}>
+const Cards = lastVisitedPatientsMock && lastVisitedPatientsMock.map(({date_of_birth, gender, name, nhsNumber}) =>
+    <Grid spacing={4} item xs={12} sm={6} md={4}>
       <CardComponent gender={gender} nhsNumber={nhsNumber} name={name} date_of_birth={date_of_birth}></CardComponent>
     </Grid>)
 
+
 function App() {
   const classes = useStyles();
+  const [activeItem, setActiveItem] = useState(0);
+  const navigationLinks = [
+    {
+      name: "Dashboard",
+      icon: <div color={activeItem === 0 ? "green.0" : 'white'}/>
+    },
+    {
+      name: "Patients",
+      icon: <div color={activeItem === 1 ? "green.0" : 'white'}/>
+    }
+  ]
+  const NavigationLinks = navigationLinks && navigationLinks.map((data, index) => <NavigationLink onClick={() => setActiveItem(index)} activeItem={activeItem} index={index} name={data.name} icon={data.icon}/>)
 
   return (
-    <div className="App">
       <div className={classes.root}>
-        <Container>
-          <Grid container spacing={8}>
-            {Cards}
+        <Container className={classes.mainContainer}>
+          <Grid container className={classes.gridContainer}>
+            <Grid item xs={12} sm={2} md={2} lg={1} className={classes.footer}>
+              {NavigationLinks}
+            </Grid>
+            <Grid item xs={6} sm={5} md={6}>
+              <Grid spacing={4} container>
+              {Cards}
+              </Grid>
+            </Grid>
+            <Grid item xs={6} sm={5} md={4}>
+              <InfoPanel data={infoFeedItems}/>
+            </Grid>
           </Grid>
         </Container>
       </div>
-    </div>
   );
 }
 

@@ -18,5 +18,8 @@
   "homepage": "https://github.com/evergreen-callum-fallows/material-ui#readme",
   "dependencies": {
     "create-react-app": "^4.0.1"
+  },
+  "devDependencies": {
+    "@material-ui/icons": "^4.11.2"
   }
 }
