@@ -1,7 +1,7 @@
 import {lastVisitedPatientsMock} from "../prototypes/App.prototype";
 import Card from "./Card";
 import * as React from "react";
-import {Box, Button, List, ListItem, ListItemText, Typography} from "@material-ui/core";
+import {Box, Button, List, ListItem, Typography} from "@material-ui/core";
 
 interface IPage {
     subtitle: string;

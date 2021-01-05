@@ -11,7 +11,7 @@ interface ICardInterface {
 
 const useStyles = makeStyles((theme) => ({
     card: {
-        border: '1px solid black',
+        border: '1px solid gray',
         borderRadius: '16px',
         boxShadow: '1px 1px 1px black'
     },
